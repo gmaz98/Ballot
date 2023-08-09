@@ -6,16 +6,18 @@ dotenv.config();
 async function main() {
 
     const contractAddress = process.argv[2];
-    const voterAddress = process.argv[3];
+    const delegatedAddress = process.argv[3];
 
     const provider = new ethers.JsonRpcProvider(process.env.RPC_ENDPOINT_URL ?? "");
     const wallet = new ethers.Wallet(process.env.PRIVATE_KEY ?? "", provider);
 
     const ballotFactory = new Ballot__factory(wallet);
     const contractBallot = ballotFactory.attach(contractAddress) as Ballot;
-    const tx = await contractBallot.giveRightToVote(voterAddress);
+    const tx = await contractBallot.delegate(delegatedAddress);
     console.log("done, transaction hash", tx.hash);
+
 }
+
 
 main()
     .then(() => process.exit(0))
